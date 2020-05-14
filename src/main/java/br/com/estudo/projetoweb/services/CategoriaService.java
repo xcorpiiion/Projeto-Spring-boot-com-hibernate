@@ -2,6 +2,7 @@ package br.com.estudo.projetoweb.services;
 
 import br.com.estudo.projetoweb.domain.Categoria;
 import br.com.estudo.projetoweb.repositories.CategoriaRepository;
+import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ public class CategoriaService {
 
     public Categoria buscar(Long id){
         Optional<Categoria> optionalCategoria = categoriaRepository.findById(id);
-        return optionalCategoria.orElse(null);
+
+        return optionalCategoria.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrato! ID: " + id
+        + ", Tipo: " + Categoria.class.getName()));
     }
 }
