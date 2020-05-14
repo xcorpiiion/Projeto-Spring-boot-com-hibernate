@@ -6,10 +6,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-public class Categoria implements Serializable {
+public class Produto implements Serializable {
 
     private static final Long serialVersionUID = 1L;
 
@@ -19,15 +20,20 @@ public class Categoria implements Serializable {
 
     private String nome;
 
-    @ManyToMany(mappedBy = "categorias")
-    private List<Produto> produtos;
+    private BigDecimal preco;
 
-    public Categoria() {
+    @ManyToMany
+    @JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    private List<Categoria> categorias;
+
+    public Produto() {
     }
 
-    public Categoria(String nome, List<Produto> produtos) {
+    public Produto(String nome, BigDecimal preco, List<Categoria> categorias) {
         this.nome = nome;
-        this.produtos = produtos;
+        this.preco = preco;
+        this.categorias = categorias;
     }
 
     public Long getId() {
@@ -46,24 +52,32 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
+    public BigDecimal getPreco() {
+        return preco;
     }
 
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) {
+        this.categorias = categorias;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (!(o instanceof Categoria)) return false;
+        if (!(o instanceof Produto)) return false;
 
-        Categoria categoria = (Categoria) o;
+        Produto produto = (Produto) o;
 
         return new EqualsBuilder()
-                .append(id, categoria.id)
+                .append(id, produto.id)
                 .isEquals();
     }
 
@@ -79,6 +93,8 @@ public class Categoria implements Serializable {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("nome", nome)
+                .append("preco", preco)
+                .append("categorias", categorias)
                 .toString();
     }
 }
