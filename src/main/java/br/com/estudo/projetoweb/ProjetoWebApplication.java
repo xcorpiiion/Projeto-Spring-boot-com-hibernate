@@ -1,13 +1,8 @@
 package br.com.estudo.projetoweb;
 
-import br.com.estudo.projetoweb.domain.Categoria;
-import br.com.estudo.projetoweb.domain.Cidade;
-import br.com.estudo.projetoweb.domain.Estado;
-import br.com.estudo.projetoweb.domain.Produto;
-import br.com.estudo.projetoweb.repositories.CategoriaRepository;
-import br.com.estudo.projetoweb.repositories.CidadeRepository;
-import br.com.estudo.projetoweb.repositories.EstadoRepository;
-import br.com.estudo.projetoweb.repositories.ProdutoRepository;
+import br.com.estudo.projetoweb.domain.*;
+import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
+import br.com.estudo.projetoweb.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -32,6 +28,12 @@ public class ProjetoWebApplication implements CommandLineRunner {
 
     @Autowired
     private EstadoRepository estadoRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ProjetoWebApplication.class, args);
@@ -60,9 +62,19 @@ public class ProjetoWebApplication implements CommandLineRunner {
         estado1.getCidades().addAll(Arrays.asList(cidade1, cidade2));
         estado2.getCidades().addAll(Arrays.asList(cidade2));
 
+        Cliente cliente1 = new Cliente("Laxus", "laxus@gmail.com", "45071341883", EnumTipoCliente.PESSOAFISICA, new ArrayList<>(), new HashSet<>());
+        Cliente cliente2 = new Cliente("Natsu", "natsu@gmail.com", "45076541003", EnumTipoCliente.PESSOAJURIDICA, new ArrayList<>(), new HashSet<>());
+
+        cliente1.getTelefones().addAll(Arrays.asList("1139852913"));
+        cliente2.getTelefones().addAll(Arrays.asList("11958004508"));
+
+        Endereco endereco = new Endereco("Rua flores", "300", "apto 300", "jardim", "02676020", cliente1, cidade1);
+
         categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
         produtoRepository.saveAll(Arrays.asList(produto1, produto2));
         estadoRepository.saveAll(Arrays.asList(estado1, estado2));
         cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2));
+        clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
+        enderecoRepository.saveAll(Arrays.asList(endereco));
     }
 }
