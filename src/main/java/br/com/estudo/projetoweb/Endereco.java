@@ -2,6 +2,7 @@ package br.com.estudo.projetoweb;
 
 import br.com.estudo.projetoweb.domain.Cidade;
 import br.com.estudo.projetoweb.domain.Cliente;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,6 +29,7 @@ public class Endereco implements Serializable {
 
     private String cep;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
