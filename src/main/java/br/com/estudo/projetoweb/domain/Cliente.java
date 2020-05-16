@@ -1,6 +1,5 @@
 package br.com.estudo.projetoweb.domain;
 
-import br.com.estudo.projetoweb.Endereco;
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -37,16 +36,20 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "Telefone")
     private Set<String> telefones;
 
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido> pedidos;
+
     public Cliente() {
     }
 
-    public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, List<Endereco> enderecos, Set<String> telefones) {
+    public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, List<Endereco> enderecos, Set<String> telefones, List<Pedido> pedidos) {
         this.nome = nome;
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
         this.enumTipoCliente = enumTipoCliente.getCodigo();
         this.enderecos = enderecos;
         this.telefones = telefones;
+        this.pedidos = pedidos;
     }
 
     public Long getId() {
@@ -103,6 +106,18 @@ public class Cliente implements Serializable {
 
     public void setTelefones(Set<String> telefones) {
         this.telefones = telefones;
+    }
+
+    public void setEnumTipoCliente(Integer enumTipoCliente) {
+        this.enumTipoCliente = enumTipoCliente;
+    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     @Override

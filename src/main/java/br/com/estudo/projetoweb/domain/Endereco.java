@@ -1,7 +1,5 @@
-package br.com.estudo.projetoweb;
+package br.com.estudo.projetoweb.domain;
 
-import br.com.estudo.projetoweb.domain.Cidade;
-import br.com.estudo.projetoweb.domain.Cliente;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

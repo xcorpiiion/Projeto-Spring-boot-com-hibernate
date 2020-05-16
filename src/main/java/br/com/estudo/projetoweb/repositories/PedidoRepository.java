@@ -1,10 +1,11 @@
 package br.com.estudo.projetoweb.repositories;
 
-import br.com.estudo.projetoweb.domain.Endereco;
+import br.com.estudo.projetoweb.domain.Estado;
+import br.com.estudo.projetoweb.domain.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
+public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
 }
