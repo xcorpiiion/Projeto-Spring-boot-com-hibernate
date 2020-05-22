@@ -1,8 +1,7 @@
 package br.com.estudo.projetoweb.domain;
 
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -29,7 +28,6 @@ public class Cliente implements Serializable {
 
     private Integer enumTipoCliente;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos;
 
@@ -37,7 +35,7 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "Telefone")
     private Set<String> telefones;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 
