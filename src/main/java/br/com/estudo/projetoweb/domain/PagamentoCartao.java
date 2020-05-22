@@ -8,9 +8,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.Entity;
 
 @Entity
-public class PagamentoCartao extends Pagamento{
+public class PagamentoCartao extends Pagamento {
 
     private Integer numeroParcelas;
+
+    public PagamentoCartao() {
+    }
 
     public Integer getNumeroParcelas() {
         return numeroParcelas;
@@ -18,9 +21,6 @@ public class PagamentoCartao extends Pagamento{
 
     public void setNumeroParcelas(Integer numeroParcelas) {
         this.numeroParcelas = numeroParcelas;
-    }
-
-    public PagamentoCartao() {
     }
 
     public PagamentoCartao(EnumEstadoPagamento enumEstadoPagamento, Pedido pedido, Integer numeroParcelas) {

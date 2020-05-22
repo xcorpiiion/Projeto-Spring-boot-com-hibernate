@@ -38,7 +38,7 @@ public class ProjetoWebApplication implements CommandLineRunner {
     private EnderecoRepository enderecoRepository;
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private IPedidoRepository pedidoRepository;
 
     @Autowired
     private PagamentoRepository pagamentoRepository;
@@ -98,6 +98,5 @@ public class ProjetoWebApplication implements CommandLineRunner {
         clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
         enderecoRepository.saveAll(Arrays.asList(endereco));
         pedidoRepository.saveAll(Arrays.asList(pedido1));
-        pagamentoRepository.saveAll(Arrays.asList(pagamento2));
     }
 }

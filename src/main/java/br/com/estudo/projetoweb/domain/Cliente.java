@@ -1,6 +1,7 @@
 package br.com.estudo.projetoweb.domain;
 
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -36,6 +37,7 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "Telefone")
     private Set<String> telefones;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 
