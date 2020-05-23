@@ -1,6 +1,7 @@
 package br.com.estudo.projetoweb.resources;
 
 import br.com.estudo.projetoweb.domain.Categoria;
+import br.com.estudo.projetoweb.dto.CategoriaDTO;
 import br.com.estudo.projetoweb.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -37,9 +40,16 @@ public class CategoriaResource {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoriaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> findAll() {
+        List<Categoria> categorias = categoriaService.findAll();
+        List<CategoriaDTO> categoriaDTOS = categorias.stream().map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(categoriaDTOS);
     }
 
 }
