@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,9 +28,10 @@ public class CategoriaResource {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> insert(@RequestBody Categoria categoria) {
+    public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+        Categoria categoria = categoriaService.converteParaDTO(categoriaDTO);
         categoria = categoriaService.insert(categoria);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoriaDTO.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
@@ -58,7 +60,7 @@ public class CategoriaResource {
                                                        @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
                                                        @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
                                                        @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
-        Page<Categoria> categorias = categoriaService.findPage(page,linesPerPage, orderBy, direction);
+        Page<Categoria> categorias = categoriaService.findPage(page, linesPerPage, orderBy, direction);
         Page<CategoriaDTO> categoriaDTOS = categorias.map(categoria -> new CategoriaDTO(categoria));
         return ResponseEntity.ok().body(categoriaDTOS);
     }

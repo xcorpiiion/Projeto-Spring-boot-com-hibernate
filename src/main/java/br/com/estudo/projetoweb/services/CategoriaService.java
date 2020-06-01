@@ -1,6 +1,7 @@
 package br.com.estudo.projetoweb.services;
 
 import br.com.estudo.projetoweb.domain.Categoria;
+import br.com.estudo.projetoweb.dto.CategoriaDTO;
 import br.com.estudo.projetoweb.repositories.CategoriaRepository;
 import br.com.estudo.projetoweb.services.exception.DataIntegratydException;
 import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
@@ -54,5 +55,9 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return categoriaRepository.findAll(pageRequest);
+    }
+
+    public Categoria converteParaDTO(CategoriaDTO categoriaDTO){
+        return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
     }
 }
