@@ -29,7 +29,7 @@ public class CategoriaResource {
 
     @PostMapping()
     public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
-        Categoria categoria = categoriaService.converteParaDTO(categoriaDTO);
+        Categoria categoria = categoriaService.fromDTO(categoriaDTO);
         categoria = categoriaService.insert(categoria);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoriaDTO.getId()).toUri();
         return ResponseEntity.created(uri).build();
