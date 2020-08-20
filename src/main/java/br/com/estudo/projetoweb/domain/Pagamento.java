@@ -33,6 +33,10 @@ public abstract class Pagamento implements Serializable {
         this.enumEstadoPagamento = enumEstadoPagamento.getCodigo();
         this.pedido = pedido;
     }
+    
+    public Pagamento(Pedido pedido) {
+    	this.pedido = pedido;
+    }
 
     public Long getId() {
         return id;
@@ -42,15 +46,15 @@ public abstract class Pagamento implements Serializable {
         this.id = id;
     }
 
-    public EnumEstadoPagamento getEnumEstadoPagamento() {
-        return EnumEstadoPagamento.toEnum(enumEstadoPagamento);
-    }
+    public Integer getEnumEstadoPagamento() {
+		return enumEstadoPagamento;
+	}
 
-    public void setEnumEstadoPagamento(EnumEstadoPagamento enumEstadoPagamento) {
-        this.enumEstadoPagamento = enumEstadoPagamento.getCodigo();
-    }
+	public void setEnumEstadoPagamento(Integer enumEstadoPagamento) {
+		this.enumEstadoPagamento = enumEstadoPagamento;
+	}
 
-    public Pedido getPedido() {
+	public Pedido getPedido() {
         return pedido;
     }
 

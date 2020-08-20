@@ -33,9 +33,9 @@ public class ClienteService {
     	return clienteRepository.findAll();
     }
     
-    public Cliente update(Cliente categoria) {
-        findById(categoria.getId());
-        return clienteRepository.save(categoria);
+    public Cliente update(Cliente cliente) {
+        updateData(findById(cliente.getId()), cliente);
+        return clienteRepository.save(cliente);
     }
 
     public void delete(Long id) {
@@ -55,5 +55,10 @@ public class ClienteService {
 
     public Cliente fromDTO(ClienteDTO clienteDTO){
         return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail());
+    }
+    
+    private void updateData(Cliente cliente1, Cliente cliente2) {
+    	cliente1.setNome(cliente2.getNome());
+    	cliente1.setEmail(cliente2.getEmail());
     }
 }
