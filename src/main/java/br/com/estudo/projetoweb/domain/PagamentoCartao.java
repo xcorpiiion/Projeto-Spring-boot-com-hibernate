@@ -10,7 +10,9 @@ import javax.persistence.Entity;
 @Entity
 public class PagamentoCartao extends Pagamento {
 
-    private Integer numeroParcelas;
+	private static final long serialVersionUID = 1L;
+	
+	private Integer numeroParcelas;
 
     public PagamentoCartao() {
     }

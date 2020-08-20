@@ -6,12 +6,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-public class ItemPedido {
+public class ItemPedido implements Serializable {
 
-    @JsonIgnore
+	private static final long serialVersionUID = 1L;
+
+	@JsonIgnore
     @EmbeddedId
     private ItemPedidoPk id = new ItemPedidoPk();
 

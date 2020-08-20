@@ -5,7 +5,9 @@ import java.util.List;
 
 public class ValidationError extends StandardError{
 
-    private List<FieldMessage> fieldMessages = new ArrayList<>();
+	private static final long serialVersionUID = 1L;
+	
+	private List<FieldMessage> fieldMessages = new ArrayList<>();
 
     public ValidationError(Integer status, String mensagem, Long timeStamp) {
         super(status, mensagem, timeStamp);

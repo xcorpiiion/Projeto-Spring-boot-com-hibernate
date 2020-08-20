@@ -1,20 +1,35 @@
 package br.com.estudo.projetoweb;
 
-import br.com.estudo.projetoweb.domain.*;
-import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
-import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
-import br.com.estudo.projetoweb.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import br.com.estudo.projetoweb.domain.Categoria;
+import br.com.estudo.projetoweb.domain.Cidade;
+import br.com.estudo.projetoweb.domain.Cliente;
+import br.com.estudo.projetoweb.domain.Endereco;
+import br.com.estudo.projetoweb.domain.Estado;
+import br.com.estudo.projetoweb.domain.Pagamento;
+import br.com.estudo.projetoweb.domain.PagamentoBoleto;
+import br.com.estudo.projetoweb.domain.PagamentoCartao;
+import br.com.estudo.projetoweb.domain.Pedido;
+import br.com.estudo.projetoweb.domain.Produto;
+import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
+import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
+import br.com.estudo.projetoweb.repositories.CategoriaRepository;
+import br.com.estudo.projetoweb.repositories.CidadeRepository;
+import br.com.estudo.projetoweb.repositories.ClienteRepository;
+import br.com.estudo.projetoweb.repositories.EnderecoRepository;
+import br.com.estudo.projetoweb.repositories.EstadoRepository;
+import br.com.estudo.projetoweb.repositories.IPedidoRepository;
+import br.com.estudo.projetoweb.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class ProjetoWebApplication implements CommandLineRunner {
@@ -39,9 +54,6 @@ public class ProjetoWebApplication implements CommandLineRunner {
 
     @Autowired
     private IPedidoRepository pedidoRepository;
-
-    @Autowired
-    private PagamentoRepository pagamentoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ProjetoWebApplication.class, args);

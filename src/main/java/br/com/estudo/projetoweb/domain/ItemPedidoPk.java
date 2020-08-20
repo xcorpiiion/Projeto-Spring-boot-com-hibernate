@@ -1,21 +1,21 @@
 package br.com.estudo.projetoweb.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.io.Serializable;
-
 @Embeddable
 public class ItemPedidoPk implements Serializable {
 
-    private static final Long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ManyToOne
+	@ManyToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
 

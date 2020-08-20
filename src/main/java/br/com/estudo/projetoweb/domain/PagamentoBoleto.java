@@ -1,19 +1,23 @@
 package br.com.estudo.projetoweb.domain;
 
-import br.com.estudo.projetoweb.domain.Pagamento;
-import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+
+import javax.persistence.Entity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
 
 @Entity
 public class PagamentoBoleto extends Pagamento {
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+	private static final long serialVersionUID = 1L;
+
+	@JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataVencimento;
 
     @JsonFormat(pattern = "dd/MM/yyyy")

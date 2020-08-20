@@ -2,6 +2,8 @@ package br.com.estudo.projetoweb.domain;
 
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,11 +14,12 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@JsonIgnoreType(value = true)
 public class Cliente implements Serializable {
 
-    private static final Long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,6 +31,7 @@ public class Cliente implements Serializable {
 
     private Integer enumTipoCliente;
 
+    
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos;
 
@@ -42,7 +46,13 @@ public class Cliente implements Serializable {
     public Cliente() {
     }
 
-    public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, List<Endereco> enderecos, Set<String> telefones, List<Pedido> pedidos) {
+    public Cliente(Long id, String nome, String email) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+	}
+
+	public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, List<Endereco> enderecos, Set<String> telefones, List<Pedido> pedidos) {
         this.nome = nome;
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
@@ -52,7 +62,7 @@ public class Cliente implements Serializable {
         this.pedidos = pedidos;
     }
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
@@ -84,15 +94,11 @@ public class Cliente implements Serializable {
         this.cpfOuCnpj = cpfOuCnpj;
     }
 
-    public EnumTipoCliente getEnumTipoCliente() {
-        return EnumTipoCliente.toEnum(enumTipoCliente);
-    }
+    public Integer getEnumTipoCliente() {
+		return enumTipoCliente;
+	}
 
-    public void setEnumTipoCliente(EnumTipoCliente enumTipoCliente) {
-        this.enumTipoCliente = enumTipoCliente.getCodigo();
-    }
-
-    public List<Endereco> getEnderecos() {
+	public List<Endereco> getEnderecos() {
         return enderecos;
     }
 

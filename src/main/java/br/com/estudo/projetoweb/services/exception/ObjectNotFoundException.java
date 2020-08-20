@@ -2,7 +2,9 @@ package br.com.estudo.projetoweb.services.exception;
 
 public class ObjectNotFoundException extends RuntimeException {
 
-    public ObjectNotFoundException(String message) {
+	private static final long serialVersionUID = 1L;
+
+	public ObjectNotFoundException(String message) {
         super(message);
     }
 
