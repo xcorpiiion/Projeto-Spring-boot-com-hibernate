@@ -45,7 +45,7 @@ public class ClienteResource {
         return ResponseEntity.noContent().build();
     }
     
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteNewDTO) {
         Cliente cliente = clienteService.fromDTO(clienteNewDTO);
         clienteService.insert(cliente);
