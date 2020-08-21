@@ -36,7 +36,11 @@ public class Cidade implements Serializable {
         this.estado = estado;
     }
 
-    public Long getId() {
+    public Cidade(Long id) {
+		this.id = id;
+	}
+
+	public Long getId() {
         return id;
     }
 

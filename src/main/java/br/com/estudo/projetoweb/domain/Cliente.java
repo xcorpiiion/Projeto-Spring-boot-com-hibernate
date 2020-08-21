@@ -32,7 +32,7 @@ public class Cliente implements Serializable {
     private Integer enumTipoCliente;
 
     
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
     private List<Endereco> enderecos;
 
     @ElementCollection
@@ -50,6 +50,13 @@ public class Cliente implements Serializable {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
+	}
+    
+	public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente) {
+		this.nome = nome;
+		this.email = email;
+		this.cpfOuCnpj = cpfOuCnpj;
+		this.enumTipoCliente = enumTipoCliente.getCodigo();
 	}
 
 	public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, List<Endereco> enderecos, Set<String> telefones, List<Pedido> pedidos) {

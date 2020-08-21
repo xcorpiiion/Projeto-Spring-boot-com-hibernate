@@ -1,7 +1,10 @@
 package br.com.estudo.projetoweb.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,14 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.estudo.projetoweb.domain.Cliente;
 import br.com.estudo.projetoweb.dto.ClienteDTO;
+import br.com.estudo.projetoweb.dto.ClienteNewDTO;
 import br.com.estudo.projetoweb.services.ClienteService;
 
 @RestController
@@ -37,6 +43,14 @@ public class ClienteResource {
         cliente.setId(id);
         clienteService.update(cliente);
         return ResponseEntity.noContent().build();
+    }
+    
+    @PostMapping()
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteNewDTO) {
+        Cliente cliente = clienteService.fromDTO(clienteNewDTO);
+        clienteService.insert(cliente);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping(value = "/{id}")
