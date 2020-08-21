@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +17,7 @@ import br.com.estudo.projetoweb.domain.Cidade;
 import br.com.estudo.projetoweb.domain.Cliente;
 import br.com.estudo.projetoweb.domain.Endereco;
 import br.com.estudo.projetoweb.domain.Estado;
+import br.com.estudo.projetoweb.domain.ItemPedido;
 import br.com.estudo.projetoweb.domain.Pagamento;
 import br.com.estudo.projetoweb.domain.PagamentoBoleto;
 import br.com.estudo.projetoweb.domain.PagamentoCartao;
@@ -102,6 +104,10 @@ public class ProjetoWebApplication implements CommandLineRunner {
 
         cliente1.setPedidos(Arrays.asList(pedido1));
         cliente2.setPedidos(Arrays.asList(pedido1));
+        
+        Set<ItemPedido> itemPedidos = new HashSet<>();
+        itemPedidos.add(new ItemPedido(pedido1, produto1, BigDecimal.ONE, produto1.getPreco(), 5));
+        pedido1.setItemPedidos(itemPedidos);
 
         categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
         produtoRepository.saveAll(Arrays.asList(produto1, produto2));

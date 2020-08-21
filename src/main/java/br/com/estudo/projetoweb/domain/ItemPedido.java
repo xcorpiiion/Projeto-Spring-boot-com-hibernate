@@ -22,15 +22,18 @@ public class ItemPedido implements Serializable {
     private BigDecimal desconto;
 
     private BigDecimal preco;
-
+    
+    private int quantidade;
+    
     public ItemPedido() {
     }
 
-    public ItemPedido(Pedido pedido, Produto produto, BigDecimal desconto, BigDecimal preco) {
+    public ItemPedido(Pedido pedido, Produto produto, BigDecimal desconto, BigDecimal preco, int quantidade) {
         this.id.setPedido(pedido);
         this.id.setProduto(produto);
         this.desconto = desconto;
         this.preco = preco;
+        this.quantidade = quantidade;
     }
 
     @JsonIgnore
@@ -42,7 +45,12 @@ public class ItemPedido implements Serializable {
     public Produto getProduto() {
         return id.getProduto();
     }
-
+    
+    public BigDecimal getSubTotal() {
+    	BigDecimal subTotal = preco.subtract(desconto);
+		return subTotal.multiply(BigDecimal.valueOf(quantidade));
+    }
+    
     public ItemPedidoPk getId() {
         return id;
     }
