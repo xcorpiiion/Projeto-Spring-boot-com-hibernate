@@ -39,7 +39,8 @@ public class ClienteResource {
     }
     
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Void> upadate(@RequestBody Cliente cliente, @PathVariable Long id) {
+    public ResponseEntity<Void> upadate(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Long id) {
+    	Cliente cliente = clienteService.fromDTO(clienteDTO);
         cliente.setId(id);
         clienteService.update(cliente);
         return ResponseEntity.noContent().build();

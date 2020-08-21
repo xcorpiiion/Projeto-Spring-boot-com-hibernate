@@ -15,7 +15,7 @@ import br.com.estudo.projetoweb.repositories.ClienteRepository;
 import br.com.estudo.projetoweb.resources.exception.FieldMessage;
 import br.com.estudo.projetoweb.services.validation.utils.CpfOrCnpjValidation;
 
-public class ClienteInsertValidator implements ConstraintValidator<ValidadorDadosCliente, ClienteNewDTO> {
+public class ClienteInsertValidator implements ConstraintValidator<ValidadorDadosClienteInsert, ClienteNewDTO> {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;

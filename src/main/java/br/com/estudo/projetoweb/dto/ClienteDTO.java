@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.estudo.projetoweb.domain.Cliente;
+import br.com.estudo.projetoweb.services.validation.ValidadorDadosClienteUpdate;
 
+@ValidadorDadosClienteUpdate(message = "Erro de validação")
 public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
