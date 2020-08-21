@@ -4,13 +4,12 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.estudo.projetoweb.services.validation.ValidadorCnpjAndCpf;
+import br.com.estudo.projetoweb.services.validation.ValidadorDadosCliente;
 
-@ValidadorCnpjAndCpf(message = "Erro de validação")
+@ValidadorDadosCliente(message = "Erro de validação")
 public class ClienteNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -22,7 +21,6 @@ public class ClienteNewDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatorio")
 	private String cpfOuCnpj;
 
-	@NotNull
 	private Integer tipo;
 
 	@NotEmpty(message = "Preenchimento obrigatorio")
