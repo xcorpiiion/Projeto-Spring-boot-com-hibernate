@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.estudo.projetoweb.domain.Pedido;
-import br.com.estudo.projetoweb.repositories.IPedidoRepository;
+import br.com.estudo.projetoweb.repositories.PedidoRepository;
 import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 
 @Service
 public class PedidoService {
 
     @Autowired
-    private IPedidoRepository pedidoRepository;
+    private PedidoRepository pedidoRepository;
 
     public Pedido buscar(Long id){
         Optional<Pedido> optionalPedido = pedidoRepository.findById(id);

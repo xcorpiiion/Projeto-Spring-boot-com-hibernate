@@ -28,7 +28,7 @@ import br.com.estudo.projetoweb.repositories.CidadeRepository;
 import br.com.estudo.projetoweb.repositories.ClienteRepository;
 import br.com.estudo.projetoweb.repositories.EnderecoRepository;
 import br.com.estudo.projetoweb.repositories.EstadoRepository;
-import br.com.estudo.projetoweb.repositories.IPedidoRepository;
+import br.com.estudo.projetoweb.repositories.PedidoRepository;
 import br.com.estudo.projetoweb.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -53,7 +53,7 @@ public class ProjetoWebApplication implements CommandLineRunner {
     private EnderecoRepository enderecoRepository;
 
     @Autowired
-    private IPedidoRepository pedidoRepository;
+    private PedidoRepository pedidoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ProjetoWebApplication.class, args);
