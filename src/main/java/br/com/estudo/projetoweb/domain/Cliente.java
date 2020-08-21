@@ -32,7 +32,7 @@ public class Cliente implements Serializable {
     private Integer enumTipoCliente;
 
     
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos;
 
     @ElementCollection
