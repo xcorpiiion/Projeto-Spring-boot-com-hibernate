@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.estudo.projetoweb.services.DatabaseService;
+import br.com.estudo.projetoweb.services.EmailService;
+import br.com.estudo.projetoweb.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -24,6 +26,11 @@ public class DevConfiguration {
 		}
 		databaseService.instanciaTestDatabase();
 		return true;
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 	
 }

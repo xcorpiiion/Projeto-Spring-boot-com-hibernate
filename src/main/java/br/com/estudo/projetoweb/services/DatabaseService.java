@@ -77,7 +77,7 @@ public class DatabaseService {
 		estado1.getCidades().addAll(Arrays.asList(cidade1, cidade2));
 		estado2.getCidades().addAll(Arrays.asList(cidade2));
 
-		Cliente cliente1 = new Cliente("Laxus", "laxus@gmail.com", "45071341883", EnumTipoCliente.PESSOAFISICA,
+		Cliente cliente1 = new Cliente("Laxus", "vinicius.da.silva.cruz.sanji@gmail.com", "45071341883", EnumTipoCliente.PESSOAFISICA,
 				new ArrayList<>(), new HashSet<>(), new ArrayList<>());
 		Cliente cliente2 = new Cliente("Natsu", "natsu@gmail.com", "45076541003", EnumTipoCliente.PESSOAJURIDICA,
 				new ArrayList<>(), new HashSet<>(), new ArrayList<>());
