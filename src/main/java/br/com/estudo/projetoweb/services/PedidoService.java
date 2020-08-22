@@ -24,7 +24,10 @@ import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 
 @Service
 public class PedidoService {
-
+	
+	@Autowired
+	private EmailService emailService;
+	
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
@@ -67,7 +70,7 @@ public class PedidoService {
 		pagamentoRepositpry.save(pedido.getPagamento());
 		colocaValoresNoItemPedido(pedido);
 		itemPedidoRepository.saveAll(pedido.getItensPedido());
-		System.out.println(pedido);
+		emailService.sendOrderConfirmationEmail(pedido);
 		return pedido;
 	}
 

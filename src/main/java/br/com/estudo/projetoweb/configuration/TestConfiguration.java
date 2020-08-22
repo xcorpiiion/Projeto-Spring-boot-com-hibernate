@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.estudo.projetoweb.services.DatabaseService;
+import br.com.estudo.projetoweb.services.EmailService;
+import br.com.estudo.projetoweb.services.MockEmailService;
 
 @Configuration
 @Profile("test")
@@ -20,4 +22,8 @@ public class TestConfiguration {
 		return true;
 	}
 	
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
+	}
 }
