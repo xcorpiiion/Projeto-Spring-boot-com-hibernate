@@ -40,10 +40,18 @@ public class ItemPedido implements Serializable {
     public Pedido getPedido() {
         return id.getPedido();
     }
+    
+    public void setPedido(Pedido pedido) {
+    	id.setPedido(pedido);
+    }
 
     @JsonIgnore
     public Produto getProduto() {
         return id.getProduto();
+    }
+    
+    public void setProduto(Produto produto) {
+    	id.setProduto(produto);
     }
     
     public BigDecimal getSubTotal() {
@@ -74,8 +82,16 @@ public class ItemPedido implements Serializable {
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
+    
+    public int getQuantidade() {
+		return quantidade;
+	}
 
-    @Override
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
 

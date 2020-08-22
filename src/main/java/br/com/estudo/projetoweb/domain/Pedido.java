@@ -60,7 +60,7 @@ public class Pedido implements Serializable {
     public BigDecimal getValorTotal() {
     	BigDecimal soma = BigDecimal.ZERO;
     	for(ItemPedido itemPedido : this.itemPedidos) {
-    		soma.add(itemPedido.getSubTotal());
+    		soma = soma.add(itemPedido.getSubTotal());
     	}
     	return soma;
     }
