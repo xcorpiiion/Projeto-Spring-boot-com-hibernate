@@ -26,20 +26,20 @@ public class ItemPedidoPk implements Serializable {
     public Pedido getPedido() {
         return pedido;
     }
-
+    
     public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    	this.pedido = pedido;
     }
-
+    
     public Produto getProduto() {
-        return produto;
-    }
+		return produto;
+	}
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
 
-    @Override
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
 

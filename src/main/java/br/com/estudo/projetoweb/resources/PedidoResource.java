@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.estudo.projetoweb.domain.Pedido;
+import br.com.estudo.projetoweb.dto.PedidoDTO;
 import br.com.estudo.projetoweb.services.PedidoService;
 
 @RestController
@@ -31,7 +32,8 @@ public class PedidoResource {
     }
     
     @PostMapping()
-    public ResponseEntity<Void> insert(@Valid @RequestBody Pedido pedido) {
+    public ResponseEntity<Void> insert(@Valid @RequestBody PedidoDTO pedidoDTO) {
+    	Pedido pedido = pedidoService.fromDTO(pedidoDTO);
         pedido = pedidoService.insert(pedido);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pedido.getId()).toUri();
         return ResponseEntity.created(uri).build();

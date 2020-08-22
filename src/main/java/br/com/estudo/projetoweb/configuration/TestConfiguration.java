@@ -9,7 +9,7 @@ import br.com.estudo.projetoweb.services.DatabaseService;
 
 @Configuration
 @Profile("test")
-public class TestConfigo {
+public class TestConfiguration {
 	
 	@Autowired
 	private DatabaseService databaseService;

@@ -2,8 +2,10 @@ package br.com.estudo.projetoweb.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,9 +20,10 @@ import javax.persistence.OneToOne;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
 
 @Entity
 public class Pedido implements Serializable {
@@ -46,7 +49,7 @@ public class Pedido implements Serializable {
     private Endereco enderecoEntrega;
 
     @OneToMany(mappedBy = "id.pedido")
-    private Set<ItemPedido> itemPedidos = new HashSet<>();
+    private Set<ItemPedido> itensPedido;
 
     public Pedido() {
     }
@@ -57,9 +60,16 @@ public class Pedido implements Serializable {
         this.enderecoEntrega = enderecoEntrega;
     }
     
+    public Pedido(Cliente cliente, Endereco enderecoEntrega, Pagamento pagamento, Set<ItemPedido> itemPedidos) {
+    	this.cliente = cliente;
+    	this.enderecoEntrega = enderecoEntrega;
+    	this.pagamento = pagamento;
+    	this.itensPedido = itemPedidos;
+    }
+    
     public BigDecimal getValorTotal() {
     	BigDecimal soma = BigDecimal.ZERO;
-    	for(ItemPedido itemPedido : this.itemPedidos) {
+    	for(ItemPedido itemPedido : this.itensPedido) {
     		soma = soma.add(itemPedido.getSubTotal());
     	}
     	return soma;
@@ -105,15 +115,15 @@ public class Pedido implements Serializable {
         this.enderecoEntrega = enderecoEntrega;
     }
 
-    public Set<ItemPedido> getItemPedidos() {
-        return itemPedidos;
-    }
+    public Set<ItemPedido> getItensPedido() {
+		return itensPedido;
+	}
 
-    public void setItemPedidos(Set<ItemPedido> itemPedidos) {
-        this.itemPedidos = itemPedidos;
-    }
+	public void setItensPedido(Set<ItemPedido> itensPedido) {
+		this.itensPedido = itensPedido;
+	}
 
-    @Override
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
@@ -133,14 +143,27 @@ public class Pedido implements Serializable {
                 .toHashCode();
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("instant", instant)
-                .append("pagamento", pagamento)
-                .append("cliente", cliente)
-                .append("enderecoEntrega", enderecoEntrega)
-                .toString();
-    }
+	@Override
+	public String toString() {
+		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido número: ");
+		builder.append(getId());
+		builder.append(", Instante: ");
+		builder.append(simpleDateFormat.format(getInstant()));
+		builder.append(", Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append(", Situação do pagamento: ");
+		builder.append(EnumEstadoPagamento.toEnum(getPagamento().getEnumEstadoPagamento()));
+		builder.append("\nDetalhes:\n ");
+		for(ItemPedido itemPedido : getItensPedido()) {
+			builder.append(itemPedido.toString());
+		}
+		builder.append(", Valor total: ");
+		builder.append(numberFormat.format(getValorTotal()));
+		builder.append("\n");
+		return builder.toString();
+	}
+    
 }

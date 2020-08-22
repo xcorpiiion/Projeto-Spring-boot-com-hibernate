@@ -28,7 +28,6 @@ import br.com.estudo.projetoweb.repositories.CidadeRepository;
 import br.com.estudo.projetoweb.repositories.ClienteRepository;
 import br.com.estudo.projetoweb.repositories.EnderecoRepository;
 import br.com.estudo.projetoweb.repositories.EstadoRepository;
-import br.com.estudo.projetoweb.repositories.PedidoRepository;
 import br.com.estudo.projetoweb.repositories.ProdutoRepository;
 
 @Service
@@ -53,11 +52,12 @@ public class DatabaseService {
 	private EnderecoRepository enderecoRepository;
 
 	@Autowired
-	private PedidoRepository pedidoRepository;
+	private PedidoService pedidoService;
 
 	public void instanciaTestDatabase() {
 		Categoria categoria1 = new Categoria("Informática", new ArrayList<>());
 		Categoria categoria2 = new Categoria("Escritorio", new ArrayList<>());
+		Categoria categoria3 = new Categoria("Teste", new ArrayList<>());
 
 		Produto produto1 = new Produto("Computador", BigDecimal.valueOf(2000.00), new ArrayList<>());
 		Produto produto2 = new Produto("Cadeira Gamer", BigDecimal.valueOf(800.00), new ArrayList<>());
@@ -101,15 +101,15 @@ public class DatabaseService {
 
 		Set<ItemPedido> itemPedidos = new HashSet<>();
 		itemPedidos.add(new ItemPedido(pedido1, produto1, BigDecimal.ONE, produto1.getPreco(), 5));
-		pedido1.setItemPedidos(itemPedidos);
+		pedido1.setItensPedido(itemPedidos);
 
-		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
+		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3));
 		produtoRepository.saveAll(Arrays.asList(produto1, produto2));
 		estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2));
 		clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
 		enderecoRepository.saveAll(Arrays.asList(endereco));
-		pedidoRepository.saveAll(Arrays.asList(pedido1));
+		pedidoService.save(pedido1);
 	}
 
 }
