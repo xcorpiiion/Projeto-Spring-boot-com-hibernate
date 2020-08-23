@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,8 @@ import br.com.estudo.projetoweb.services.UserDetailService;
 
 @Configuration
 @EnableWebSecurity
+/*Essa anotação vai permitir com que eu coloque anotações de pré-autorização nos endpoints*/
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	/*
@@ -32,6 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 */
 	private static String[] LIBERADOS_PELO_TOKEN = { "/h2-console/**" };
 	private static String[] LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES = { "/produtos/**", "/categorias/**" };
+	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR = { "/clientes/**"};
 	
 	@Autowired
 	private Environment enviroment;
@@ -57,8 +61,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 * permitAll() -> ele permite que todos os antMatchers passados como argumento sejam permitidos para serem acessados .
 		 * anyRequest() -> ele fala que todas as outras request devem ser autentificadas por causa do metodo "authenticated()".
 		 */
-		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES).permitAll()
-		.antMatchers(LIBERADOS_PELO_TOKEN).permitAll().anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES)
+		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN)
+		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR)
+		.permitAll().anyRequest().authenticated();
 		/*O método a baixo que fará todo o filtro de autentificação do usuário*/
 		http.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil));
 		/*O método a baixo que fará todo o filtro de autorização do usuário*/

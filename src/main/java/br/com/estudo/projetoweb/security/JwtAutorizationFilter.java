@@ -69,7 +69,7 @@ public class JwtAutorizationFilter extends BasicAuthenticationFilter {
 	private UsernamePasswordAuthenticationToken getAuthentication(String token) {
 		if (jwtUtil.isTokenValido(token)) {
 			String username = jwtUtil.getUsername(token);
-			/*Esse campo a baixo vai me retornar um usuário*/
+			/* Esse campo a baixo vai me retornar um usuário */
 			UserDetails userDetails = this.userDetailService.loadUserByUsername(username);
 			return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 		}
