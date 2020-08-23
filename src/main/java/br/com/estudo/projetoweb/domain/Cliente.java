@@ -1,5 +1,6 @@
 package br.com.estudo.projetoweb.domain;
 
+import br.com.estudo.projetoweb.domain.enums.EnumPerfil;
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
@@ -10,8 +11,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @JsonIgnoreType(value = true)
@@ -42,18 +45,26 @@ public class Cliente implements Serializable {
     @ElementCollection
     @CollectionTable(name = "Telefone")
     private Set<String> telefones;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "Perfis")
+    private Set<Integer> perfis;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 
     public Cliente() {
+    	this.perfis = new HashSet<>();
+    	addPerfis(EnumPerfil.CLIENTE);
     }
 
     public Cliente(Long id, String nome, String email) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
+		this.perfis = new HashSet<>();
+		addPerfis(EnumPerfil.CLIENTE);
 	}
     
 	public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente) {
@@ -61,6 +72,8 @@ public class Cliente implements Serializable {
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.enumTipoCliente = enumTipoCliente.getCodigo();
+		this.perfis = new HashSet<>();
+		addPerfis(EnumPerfil.CLIENTE);
 	}
 	
 	public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, String senha) {
@@ -69,6 +82,8 @@ public class Cliente implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.enumTipoCliente = enumTipoCliente.getCodigo();
 		this.senha = senha;
+		this.perfis = new HashSet<>();
+		addPerfis(EnumPerfil.CLIENTE);
 	}
 
 	public Cliente(String nome, String email, String cpfOuCnpj, EnumTipoCliente enumTipoCliente, List<Endereco> enderecos, Set<String> telefones, List<Pedido> pedidos) {
@@ -79,6 +94,8 @@ public class Cliente implements Serializable {
         this.enderecos = enderecos;
         this.telefones = telefones;
         this.pedidos = pedidos;
+        this.perfis = new HashSet<>();
+        addPerfis(EnumPerfil.CLIENTE);
     }
 
 	public Long getId() {
@@ -136,8 +153,16 @@ public class Cliente implements Serializable {
     public Set<String> getTelefones() {
         return telefones;
     }
+    
+    public Set<EnumPerfil> getPerfis() {
+		return perfis.stream().map(perfil -> EnumPerfil.toEnum(perfil)).collect(Collectors.toSet());
+	}
 
-    public void setTelefones(Set<String> telefones) {
+	public void addPerfis(EnumPerfil perfil) {
+		this.perfis.add(perfil.getCodigo());
+	}
+
+	public void setTelefones(Set<String> telefones) {
         this.telefones = telefones;
     }
 

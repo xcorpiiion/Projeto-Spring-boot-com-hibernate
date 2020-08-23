@@ -23,6 +23,7 @@ import br.com.estudo.projetoweb.domain.PagamentoCartao;
 import br.com.estudo.projetoweb.domain.Pedido;
 import br.com.estudo.projetoweb.domain.Produto;
 import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
+import br.com.estudo.projetoweb.domain.enums.EnumPerfil;
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
 import br.com.estudo.projetoweb.repositories.CategoriaRepository;
 import br.com.estudo.projetoweb.repositories.CidadeRepository;
@@ -81,11 +82,11 @@ public class DatabaseService {
 		estado1.getCidades().addAll(Arrays.asList(cidade1, cidade2));
 		estado2.getCidades().addAll(Arrays.asList(cidade2));
 
-		Cliente cliente1 = new Cliente("Laxus", "vinicius.da.silva.cruz.sanji@gmail.com", "45071341883", EnumTipoCliente.PESSOAFISICA,
+		Cliente cliente1 = new Cliente("Laxus", "vinicius.da.silva.cruz.sanji@gmail.com", "15172664084", EnumTipoCliente.PESSOAFISICA,
 				new ArrayList<>(), new HashSet<>(), new ArrayList<>());
-		Cliente cliente2 = new Cliente("Natsu", "natsu@gmail.com", "45076541003", EnumTipoCliente.PESSOAJURIDICA,
+		Cliente cliente2 = new Cliente("Natsu", "natsu@gmail.com", "12973783003", EnumTipoCliente.PESSOAJURIDICA,
 				new ArrayList<>(), new HashSet<>(), new ArrayList<>());
-		
+		cliente2.addPerfis(EnumPerfil.ADMIN);
 		cliente1.setSenha(bCryptPasswordEncoder.encode("39852913"));
 		cliente2.setSenha(bCryptPasswordEncoder.encode("12345678"));
 		cliente1.getTelefones().addAll(Arrays.asList("1139852913"));
