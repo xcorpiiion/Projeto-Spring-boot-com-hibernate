@@ -30,6 +30,7 @@ import br.com.estudo.projetoweb.repositories.CidadeRepository;
 import br.com.estudo.projetoweb.repositories.ClienteRepository;
 import br.com.estudo.projetoweb.repositories.EnderecoRepository;
 import br.com.estudo.projetoweb.repositories.EstadoRepository;
+import br.com.estudo.projetoweb.repositories.PedidoRepository;
 import br.com.estudo.projetoweb.repositories.ProdutoRepository;
 
 @Service
@@ -54,7 +55,7 @@ public class DatabaseService {
 	private EnderecoRepository enderecoRepository;
 
 	@Autowired
-	private PedidoService pedidoService;
+	private PedidoRepository pedidoRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -116,7 +117,7 @@ public class DatabaseService {
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2));
 		clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
 		enderecoRepository.saveAll(Arrays.asList(endereco));
-		pedidoService.save(pedido1);
+		pedidoRepository.saveAll(Arrays.asList(pedido1));
 	}
 
 }

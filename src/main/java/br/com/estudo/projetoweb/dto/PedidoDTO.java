@@ -1,7 +1,9 @@
 package br.com.estudo.projetoweb.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import br.com.estudo.projetoweb.domain.ItemPedido;
 import br.com.estudo.projetoweb.domain.Pagamento;
 import br.com.estudo.projetoweb.domain.Pedido;
 import br.com.estudo.projetoweb.domain.Produto;
@@ -18,7 +20,15 @@ public class PedidoDTO implements Serializable{
 	
 	private int quantidade;
 	
+	private Set<ItemPedido> itensPedido;
+	
 	public PedidoDTO() {
+	}
+	
+	public PedidoDTO(Pedido pedido) {
+		this.idCliente = pedido.getCliente().getId();
+		this.pagamento = pedido.getPagamento();
+		this.itensPedido = pedido.getItensPedido();
 	}
 	
 	public PedidoDTO(Pedido pedido, Pagamento pagamento, Produto produto, int quantidade) {
@@ -26,6 +36,15 @@ public class PedidoDTO implements Serializable{
 		this.pagamento = pagamento;
 		this.produto = produto;
 		this.quantidade = quantidade;
+		this.itensPedido = pedido.getItensPedido();
+	}
+
+	public Set<ItemPedido> getItensPedido() {
+		return itensPedido;
+	}
+
+	public void setItensPedido(Set<ItemPedido> itensPedido) {
+		this.itensPedido = itensPedido;
 	}
 
 	public int getQuantidade() {

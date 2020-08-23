@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import br.com.estudo.projetoweb.domain.Cliente;
@@ -20,6 +23,8 @@ import br.com.estudo.projetoweb.dto.PedidoDTO;
 import br.com.estudo.projetoweb.repositories.ItemPedidoRepository;
 import br.com.estudo.projetoweb.repositories.PagamentoRepository;
 import br.com.estudo.projetoweb.repositories.PedidoRepository;
+import br.com.estudo.projetoweb.security.UserSpringSecurity;
+import br.com.estudo.projetoweb.services.exception.AuthorizationException;
 import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 
 @Service
@@ -82,6 +87,17 @@ public class PedidoService {
 			itemPedido.setPedido(pedido);
 		}
 	}
+	
+	/*O metodo abaixo serve para retornar uma consulta paginada*/
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSpringSecurity userSpringSecurity = UserService.usuarioLogado();
+		if(userSpringSecurity == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Cliente cliente = clienteService.findById(userSpringSecurity.getId());
+        return pedidoRepository.findByCliente(cliente, pageRequest);
+    }
 	
 	public Pedido fromDTO(PedidoDTO pedidoDTO) {
 		Cliente cliente = clienteService.findById(pedidoDTO.getIdCliente());
