@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.estudo.projetoweb.domain.Categoria;
@@ -53,6 +54,9 @@ public class DatabaseService {
 
 	@Autowired
 	private PedidoService pedidoService;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public void instanciaTestDatabase() {
 		Categoria categoria1 = new Categoria("Informática", new ArrayList<>());
@@ -81,7 +85,9 @@ public class DatabaseService {
 				new ArrayList<>(), new HashSet<>(), new ArrayList<>());
 		Cliente cliente2 = new Cliente("Natsu", "natsu@gmail.com", "45076541003", EnumTipoCliente.PESSOAJURIDICA,
 				new ArrayList<>(), new HashSet<>(), new ArrayList<>());
-
+		
+		cliente1.setSenha(bCryptPasswordEncoder.encode("39852913"));
+		cliente2.setSenha(bCryptPasswordEncoder.encode("12345678"));
 		cliente1.getTelefones().addAll(Arrays.asList("1139852913"));
 		cliente2.getTelefones().addAll(Arrays.asList("11958004508"));
 

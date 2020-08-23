@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.estudo.projetoweb.domain.Cidade;
@@ -27,6 +28,9 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public Cliente findById(Long id) {
 		Optional<Cliente> optionalCliente = clienteRepository.findById(id);
@@ -68,22 +72,25 @@ public class ClienteService {
 		return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail());
 	}
 
-	public Cliente fromDTO(ClienteNewDTO clienteNewDTO){
-    	Cliente cliente = new Cliente(clienteNewDTO.getNome(), clienteNewDTO.getEmail(), clienteNewDTO.getCpfOuCnpj(), EnumTipoCliente.toEnum(clienteNewDTO.getTipo()));
-    	Cidade cidade = new Cidade(clienteNewDTO.getCidadeId());
-		Endereco endereco = new Endereco(clienteNewDTO.getLogradouro(), clienteNewDTO.getNumero(), clienteNewDTO.getComplemento(), clienteNewDTO.getBairro(), clienteNewDTO.getCep(), cliente, cidade);
+	public Cliente fromDTO(ClienteNewDTO clienteNewDTO) {
+		Cliente cliente = new Cliente(clienteNewDTO.getNome(), clienteNewDTO.getEmail(), clienteNewDTO.getCpfOuCnpj(),
+				EnumTipoCliente.toEnum(clienteNewDTO.getTipo()),
+				bCryptPasswordEncoder.encode(clienteNewDTO.getSenha()));
+		Cidade cidade = new Cidade(clienteNewDTO.getCidadeId());
+		Endereco endereco = new Endereco(clienteNewDTO.getLogradouro(), clienteNewDTO.getNumero(),
+				clienteNewDTO.getComplemento(), clienteNewDTO.getBairro(), clienteNewDTO.getCep(), cliente, cidade);
 		cliente.setEnderecos(new ArrayList<>());
 		cliente.getEnderecos().add(endereco);
 		cliente.setTelefones(new HashSet<>());
-    	cliente.getTelefones().add(clienteNewDTO.getTelefone());
-    	if(clienteNewDTO.getTelefone2() != null) {
-    		cliente.getTelefones().add(clienteNewDTO.getTelefone2());
-    	}
-    	if(clienteNewDTO.getTelefone3() != null) {
-    		cliente.getTelefones().add(clienteNewDTO.getTelefone3());
-    	}
+		cliente.getTelefones().add(clienteNewDTO.getTelefone());
+		if (clienteNewDTO.getTelefone2() != null) {
+			cliente.getTelefones().add(clienteNewDTO.getTelefone2());
+		}
+		if (clienteNewDTO.getTelefone3() != null) {
+			cliente.getTelefones().add(clienteNewDTO.getTelefone3());
+		}
 		return cliente;
-    }
+	}
 
 	private void updateData(Cliente cliente1, Cliente cliente2) {
 		cliente1.setNome(cliente2.getNome());
