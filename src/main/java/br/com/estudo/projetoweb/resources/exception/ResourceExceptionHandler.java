@@ -1,5 +1,6 @@
 package br.com.estudo.projetoweb.resources.exception;
 
+import br.com.estudo.projetoweb.services.exception.AuthorizationException;
 import br.com.estudo.projetoweb.services.exception.DataIntegratydException;
 import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,12 @@ public class ResourceExceptionHandler {
             validationError.addError(fieldError.getField(), fieldError.getDefaultMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+    }
+    
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+        StandardError standardError = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(standardError);
     }
 
 }

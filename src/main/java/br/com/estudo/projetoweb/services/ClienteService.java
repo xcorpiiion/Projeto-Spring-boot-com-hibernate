@@ -16,10 +16,13 @@ import org.springframework.stereotype.Service;
 import br.com.estudo.projetoweb.domain.Cidade;
 import br.com.estudo.projetoweb.domain.Cliente;
 import br.com.estudo.projetoweb.domain.Endereco;
+import br.com.estudo.projetoweb.domain.enums.EnumPerfil;
 import br.com.estudo.projetoweb.domain.enums.EnumTipoCliente;
 import br.com.estudo.projetoweb.dto.ClienteDTO;
 import br.com.estudo.projetoweb.dto.ClienteNewDTO;
 import br.com.estudo.projetoweb.repositories.ClienteRepository;
+import br.com.estudo.projetoweb.security.UserSpringSecurity;
+import br.com.estudo.projetoweb.services.exception.AuthorizationException;
 import br.com.estudo.projetoweb.services.exception.DataIntegratydException;
 import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 
@@ -33,10 +36,19 @@ public class ClienteService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public Cliente findById(Long id) {
+		verificaSeUsuarioPossuiPermissao(id);
 		Optional<Cliente> optionalCliente = clienteRepository.findById(id);
 
 		return optionalCliente.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrato! ID: " + id + ", Tipo: " + Cliente.class.getName()));
+	}
+
+	private void verificaSeUsuarioPossuiPermissao(Long id) {
+		UserSpringSecurity userSpringSecurity = UserService.usuarioLogado();
+		if (userSpringSecurity == null
+				|| !userSpringSecurity.hasPermissao(EnumPerfil.ADMIN) && !id.equals(userSpringSecurity.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
 	}
 
 	public List<Cliente> findAll() {

@@ -71,5 +71,9 @@ public class UserSpringSecurity implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+	
+	public boolean hasPermissao(EnumPerfil enumPerfil) {
+		return getAuthorities().contains(new SimpleGrantedAuthority(enumPerfil.getDescricao()));
+	}
 
 }
