@@ -17,10 +17,10 @@ public class UserDetailService implements UserDetailsService {
 	
 	/*O metodo abaixo vai retornar um usuario*/
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Cliente cliente = clienteRepository.findByEmail(email);
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Cliente cliente = clienteRepository.findByEmail(username);
 		if(cliente == null) {
-			throw new UsernameNotFoundException(email);
+			throw new UsernameNotFoundException(username);
 		}
 		return new UserSpringSecurity(cliente.getId(), cliente.getEmail(), cliente.getSenha(), cliente.getPerfis());
 	}

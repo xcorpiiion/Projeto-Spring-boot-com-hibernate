@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		 * pede um valor (que no caso eu usei a palavra "Bearer" + o token que foi
 		 * gerado)
 		 */
-		response.addHeader("Authorization", "Bearer" + token);
+		response.addHeader("Authorization", "Bearer " + token);
 	}
 
 	/* Essa classe é chamada quando o usuario não consegue autentificar */

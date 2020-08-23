@@ -18,6 +18,7 @@ import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import br.com.estudo.projetoweb.security.JwtAuthenticationFilter;
+import br.com.estudo.projetoweb.security.JwtAutorizationFilter;
 import br.com.estudo.projetoweb.security.JwtUtil;
 import br.com.estudo.projetoweb.services.UserDetailService;
 
@@ -58,8 +59,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 */
 		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES).permitAll()
 		.antMatchers(LIBERADOS_PELO_TOKEN).permitAll().anyRequest().authenticated();
-		/*O método a baixo que fará todo o filtro de autorização do usuário*/
+		/*O método a baixo que fará todo o filtro de autentificação do usuário*/
 		http.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil));
+		/*O método a baixo que fará todo o filtro de autorização do usuário*/
+		http.addFilter(new JwtAutorizationFilter(authenticationManager(), jwtUtil, userDetailService));
 		/*Essa configuração garante que o backend não irá criar uma sessão para o usuario*/
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
