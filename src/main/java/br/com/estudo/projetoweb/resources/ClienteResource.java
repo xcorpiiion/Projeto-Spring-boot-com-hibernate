@@ -39,6 +39,12 @@ public class ClienteResource {
 		Cliente cliente = clienteService.findById(id);
 		return ResponseEntity.ok().body(cliente);
 	}
+	
+	@GetMapping(value = "/email")
+	public ResponseEntity<?> find(@RequestParam(value = "value") String email) {
+		Cliente cliente = clienteService.findByEmail(email);
+		return ResponseEntity.ok().body(cliente);
+	}
 
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> upadate(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Long id) {

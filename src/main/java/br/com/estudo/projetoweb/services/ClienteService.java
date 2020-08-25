@@ -70,6 +70,18 @@ public class ClienteService {
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
 	}
+	
+	public Cliente findByEmail(String email) {
+		UserSpringSecurity userSpringSecurity = UserService.usuarioLogado();
+		if (userSpringSecurity == null || userSpringSecurity.hasPermissao(EnumPerfil.ADMIN) || !email.equals(userSpringSecurity.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		Cliente cliente = clienteRepository.findByEmail(email);
+		if(cliente == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! ID: " + userSpringSecurity.getId() + ", Tipo: " + Cliente.class.getName());
+		}
+		return cliente;
+	}
 
 	public Cliente update(Cliente cliente) {
 		updateData(findById(cliente.getId()), cliente);
