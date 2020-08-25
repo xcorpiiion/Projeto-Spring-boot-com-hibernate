@@ -23,38 +23,38 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
 		StandardError standardError = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(),
-				System.currentTimeMillis());
+				System.currentTimeMillis(), "Not found", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
 	}
 
 	@ExceptionHandler(DataIntegratydException.class)
 	public ResponseEntity<StandardError> dataIntegratyd(ObjectNotFoundException e, HttpServletRequest request) {
 		StandardError standardError = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
-				System.currentTimeMillis());
+				System.currentTimeMillis(), "Integridade de dados", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardError> dataIntegratyd(MethodArgumentNotValidException e, HttpServletRequest request) {
-		ValidationError validationError = new ValidationError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
-				System.currentTimeMillis());
+	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
+		ValidationError validationError = new ValidationError(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage(),
+				System.currentTimeMillis(), "Erro de validação", request.getRequestURI());
 		for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
 			validationError.addError(fieldError.getField(), fieldError.getDefaultMessage());
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(validationError);
 	}
 
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
 		StandardError standardError = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(),
-				System.currentTimeMillis());
+				System.currentTimeMillis(), "Acesso negado", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(standardError);
 	}
 
 	@ExceptionHandler(FileException.class)
 	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request) {
 		StandardError standardError = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
-				System.currentTimeMillis());
+				System.currentTimeMillis(), "Erro de arquivo", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
 	}
 
@@ -65,21 +65,22 @@ public class ResourceExceptionHandler {
 		 * AmazonServiceException
 		 */
 		HttpStatus codigoHttp = HttpStatus.valueOf(e.getErrorCode());
-		StandardError standardError = new StandardError(codigoHttp.value(), e.getMessage(), System.currentTimeMillis());
+		StandardError standardError = new StandardError(codigoHttp.value(), e.getMessage(), System.currentTimeMillis(),
+				"Erro Amazon Service", request.getRequestURI());
 		return ResponseEntity.status(codigoHttp).body(standardError);
 	}
 
 	@ExceptionHandler(AmazonClientException.class)
 	public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request) {
 		StandardError standardError = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
-				System.currentTimeMillis());
+				System.currentTimeMillis(), "Erro Amazon Client", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
 	}
 
 	@ExceptionHandler(AmazonS3Exception.class)
 	public ResponseEntity<StandardError> amazonS3(AmazonS3Exception e, HttpServletRequest request) {
 		StandardError standardError = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
-				System.currentTimeMillis());
+				System.currentTimeMillis(), "Erro Amazon S3", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
 	}
 

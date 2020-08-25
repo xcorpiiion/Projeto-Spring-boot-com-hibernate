@@ -116,17 +116,21 @@ public class ClienteResource {
 	@GetMapping
 	public ResponseEntity<List<ClienteDTO>> findAll() {
 		List<Cliente> clientes = clienteService.findAll();
-		List<ClienteDTO> clienteDTOS = clientes.stream().map(cliente -> new ClienteDTO(cliente))
+		List<ClienteDTO> clienteDTOS = clientes.stream().map(cliente -> addClienteInClienteDTO(cliente))
 				.collect(Collectors.toList());
 		return ResponseEntity.ok().body(clienteDTOS);
+	}
+
+	private ClienteDTO addClienteInClienteDTO(Cliente cliente) {
+		return new ClienteDTO(cliente);
 	}
 
 	/*
 	 * @RequestParam -> ele permite passar valores pelo parametro para a url mas
 	 * esse valor não pertence a url, por exemplo quando eu passo o número da
 	 * pagina, esse valor não pertence a url mas ele está funcionando como uma
-	 * especie de filtro.
-	 * Esse valor é capturado pelo controller através dos metodos GET ou POST
+	 * especie de filtro. Esse valor é capturado pelo controller através dos metodos
+	 * GET ou POST
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping(value = "/page")
@@ -135,7 +139,7 @@ public class ClienteResource {
 			@RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		Page<Cliente> clientes = clienteService.findPage(page, linesPerPage, orderBy, direction);
-		Page<ClienteDTO> clienteDTOS = clientes.map(cliente -> new ClienteDTO(cliente));
+		Page<ClienteDTO> clienteDTOS = clientes.map(cliente -> addClienteInClienteDTO(cliente));
 		return ResponseEntity.ok().body(clienteDTOS);
 	}
 

@@ -7,7 +7,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class URL {
-	
+
+	private URL() {
+
+	}
+
 	public static String decodificaParam(String valorParaDecodificar) {
 		try {
 			return URLDecoder.decode(valorParaDecodificar, "UTF-8");
