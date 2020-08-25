@@ -80,6 +80,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		 * gerado)
 		 */
 		response.addHeader("Authorization", "Bearer " + token);
+		/*
+		 * Esse comanda faz com que o nosso cabeçalho fique exposto pois naturalmente
+		 * ele não fica, então eu preciso desse comando para ele ficar exposto
+		 */
+		response.addHeader("access-control-expose-headers", "Authorization");
 	}
 
 	/* Essa classe é chamada quando o usuario não consegue autentificar */

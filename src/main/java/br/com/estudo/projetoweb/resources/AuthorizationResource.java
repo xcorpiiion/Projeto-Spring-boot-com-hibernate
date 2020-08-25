@@ -22,10 +22,10 @@ public class AuthorizationResource {
 
 	@Autowired
 	private JwtUtil jwtUtil;
-	
+
 	@Autowired
 	private AuthorizationService authorizationService;
-	
+
 	/*
 	 * Método abaixo gera um novo token quando o usuário estiver logado e o tempo do
 	 * token estiver acabando
@@ -35,9 +35,14 @@ public class AuthorizationResource {
 		UserSpringSecurity userSpringSecurity = UserService.usuarioLogado();
 		String token = jwtUtil.generateToken(userSpringSecurity.getUsername());
 		response.addHeader("Authorization", "Bearer " + token);
+		/*
+		 * Esse comanda faz com que o nosso cabeçalho fique exposto pois naturalmente
+		 * ele não fica, então eu preciso desse comando para ele ficar exposto
+		 */
+		response.addHeader("access-control-expose-headers", "Authorization");
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@PostMapping(value = "/forgotPassword")
 	public ResponseEntity<Void> forgotPassword(@Valid @RequestBody EmailDTO emailDTO) {
 		authorizationService.enviaUmaNovaSenha(emailDTO.getEmail());
