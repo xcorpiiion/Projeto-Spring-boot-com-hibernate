@@ -25,7 +25,10 @@ import br.com.estudo.projetoweb.services.UserDetailService;
 
 @Configuration
 @EnableWebSecurity
-/*Essa anotação vai permitir com que eu coloque anotações de pré-autorização nos endpoints*/
+/*
+ * Essa anotação vai permitir com que eu coloque anotações de pré-autorização
+ * nos endpoints
+ */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -34,51 +37,60 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 * Token vai bloquear
 	 */
 	private static String[] LIBERADOS_PELO_TOKEN = { "/h2-console/**" };
-	private static String[] LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO = { "/produtos/**", "/categorias/**", "/estados**" };
-	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO = { "/clientes**", "/authorization/forgotPassword/**"};
-	
+	private static String[] LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO = { "/produtos/**",
+			"/categorias/**", "/estados**" };
+	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO = { "/clientes**",
+			"/authorization/forgotPassword/**" };
+
 	@Autowired
 	private Environment enviroment;
-	
+
 	@Autowired
 	private UserDetailService userDetailService;
-	
+
 	@Autowired
 	private JwtUtil jwtUtil;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		verificaSePossuiProfileAtivo(http);
-		
-		/*Esse metodo abaixo desabilita a proteção de ataque csrf em sistemas stateless, pois esse ataque é baseado no armazenamento 
-		 * da autentificação em sessão*/
+
+		/*
+		 * Esse metodo abaixo desabilita a proteção de ataque csrf em sistemas
+		 * stateless, pois esse ataque é baseado no armazenamento da autentificação em
+		 * sessão
+		 */
 		http.cors().and().csrf().disable();
 		/*
-		 * authorizaRequests() -> ele requisita uma autorização.
-		 * antMatchers() -> ele pede os MATCHERS que são os caminhos que estão na variavel.
-		 * LIBERADOS_PELO_TOKEN 
-		 * permitAll() -> ele permite que todos os antMatchers passados como argumento sejam permitidos para serem acessados .
-		 * anyRequest() -> ele fala que todas as outras request devem ser autentificadas por causa do metodo "authenticated()".
+		 * authorizaRequests() -> ele requisita uma autorização. antMatchers() -> ele
+		 * pede os MATCHERS que são os caminhos que estão na variavel.
+		 * LIBERADOS_PELO_TOKEN permitAll() -> ele permite que todos os antMatchers
+		 * passados como argumento sejam permitidos para serem acessados . anyRequest()
+		 * -> ele fala que todas as outras request devem ser autentificadas por causa do
+		 * metodo "authenticated()".
 		 */
 		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO)
-		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN)
-		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO)
-		.permitAll().anyRequest().authenticated();
-		/*O método a baixo que fará todo o filtro de autentificação do usuário*/
+				.permitAll().antMatchers(LIBERADOS_PELO_TOKEN).permitAll()
+				.antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO).permitAll().anyRequest()
+				.authenticated();
+		/* O método a baixo que fará todo o filtro de autentificação do usuário */
 		http.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil));
-		/*O método a baixo que fará todo o filtro de autorização do usuário*/
+		/* O método a baixo que fará todo o filtro de autorização do usuário */
 		http.addFilter(new JwtAutorizationFilter(authenticationManager(), jwtUtil, userDetailService));
-		/*Essa configuração garante que o backend não irá criar uma sessão para o usuario*/
+		/*
+		 * Essa configuração garante que o backend não irá criar uma sessão para o
+		 * usuario
+		 */
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	private void verificaSePossuiProfileAtivo(HttpSecurity http) throws Exception {
-		if(Arrays.asList(enviroment.getActiveProfiles()).contains("test")) {
+		if (Arrays.asList(enviroment.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
 	}
-	
+
 	/*
 	 * Esse metodo abaixo permite com que eu possa acessar os meus ends points com
 	 * multiplas fontes com as configurações básicas.
@@ -86,16 +98,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Bean
 	protected CorsConfigurationSource corsConfiguration() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+		/*Permite que todos os verbos http tenham permissão para acesso pois o Cors estava bloqueando*/
+		corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		source.registerCorsConfiguration("/**", corsConfiguration);
 		return source;
 	}
-	
-	/*Esse metodo abaixo serve para criptografar uma senha*/
+
+	/* Esse metodo abaixo serve para criptografar uma senha */
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailService).passwordEncoder(bCryptPasswordEncoder());
