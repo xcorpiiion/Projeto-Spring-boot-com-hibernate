@@ -34,8 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 * Token vai bloquear
 	 */
 	private static String[] LIBERADOS_PELO_TOKEN = { "/h2-console/**" };
-	private static String[] LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES = { "/produtos/**", "/categorias/**" };
-	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR = { "/clientes**", "/authorization/forgotPassword/**"};
+	private static String[] LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO = { "/produtos/**", "/categorias/**", "/estados**" };
+	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO = { "/clientes**", "/authorization/forgotPassword/**"};
 	
 	@Autowired
 	private Environment enviroment;
@@ -61,9 +61,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 * permitAll() -> ele permite que todos os antMatchers passados como argumento sejam permitidos para serem acessados .
 		 * anyRequest() -> ele fala que todas as outras request devem ser autentificadas por causa do metodo "authenticated()".
 		 */
-		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES)
+		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO)
 		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN)
-		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR)
+		.permitAll().antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO)
 		.permitAll().anyRequest().authenticated();
 		/*O método a baixo que fará todo o filtro de autentificação do usuário*/
 		http.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil));

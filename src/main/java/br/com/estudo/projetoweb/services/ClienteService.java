@@ -53,6 +53,7 @@ public class ClienteService {
 
 	public Cliente findById(Long id) {
 		verificaSeUsuarioPossuiPermissao(id);
+		/*Optional -> ele adiciona o objeto de forma segura e trata melhor o NullPointer caso tenha*/
 		Optional<Cliente> optionalCliente = clienteRepository.findById(id);
 
 		return optionalCliente.orElseThrow(() -> new ObjectNotFoundException(
@@ -103,7 +104,9 @@ public class ClienteService {
 		}
 	}
 
+	/*Page -> ele retorna uma consulta páginada*/
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		/*PageRequest -> Ele pega os detalhes da paginação*/
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
 		return clienteRepository.findAll(pageRequest);
 	}

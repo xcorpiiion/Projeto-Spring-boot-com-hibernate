@@ -27,6 +27,13 @@ import br.com.estudo.projetoweb.dto.ClienteDTO;
 import br.com.estudo.projetoweb.dto.ClienteNewDTO;
 import br.com.estudo.projetoweb.services.ClienteService;
 
+/*@RestController -> É responsável por criar um Map do
+Model Object e encontrar uma View. Basicamente ele é o
+responsável por controlar as requisições indicando quem
+deve receber as requisições para quem deve responde-las.
+Também pode mandar diretamente no fluxo
+do response usando a anotação e
+concluir a solicitação.*/
 @RestController
 @RequestMapping(value = "/clientes")
 public class ClienteResource {
@@ -34,18 +41,30 @@ public class ClienteResource {
 	@Autowired
 	private ClienteService clienteService;
 
+	/*
+	 * @PathVariable -> é utilizado quando o valor da variável é passada diretamente
+	 * na URL, mas não como um parametro que você passa após o sinal de interrogação
+	 * (?) mas sim quando o valor faz parte da url.
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> find(@PathVariable Long id) {
 		Cliente cliente = clienteService.findById(id);
 		return ResponseEntity.ok().body(cliente);
 	}
-	
+
+	/*
+	 * ResponseEntity -> ele representa toda a resposta HTTP: código de status,
+	 * cabeçalhos e corpo. O ResponseEntity é um tipo genérico. Como resultado,
+	 * podemos usar qualquer tipo como corpo de resposta (Como String, Objetos e
+	 * etc...)
+	 */
 	@GetMapping(value = "/email")
 	public ResponseEntity<?> find(@RequestParam(value = "value") String email) {
 		Cliente cliente = clienteService.findByEmail(email);
 		return ResponseEntity.ok().body(cliente);
 	}
 
+	/* @ResquestBody -> Ele converte o Json em um Objeto java automaticamente */
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> upadate(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Long id) {
 		Cliente cliente = clienteService.fromDTO(clienteDTO);
@@ -54,15 +73,26 @@ public class ClienteResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	/* @ResquestBody -> Ele converte o Json em um Objeto java automaticamente */
 	@PostMapping
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteNewDTO) {
 		Cliente cliente = clienteService.fromDTO(clienteNewDTO);
 		clienteService.insert(cliente);
+		/*
+		 * O metodo que a URI esta recebendo faz o seguinte: Ele recebe um componente
+		 * criado a partir da atual requisição que vem do caminho informado pelo
+		 * “path(“”)” depois ele constrói e expande seu argumento e converte para uma
+		 * URI.
+		 */
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId())
 				.toUri();
+		/*
+		 * URIBuilder -> ele já pega automaticamente o endereço do servidor, e você só
+		 * precisa passar o final da URI.
+		 */
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@PostMapping(value = "/picture")
 	public ResponseEntity<Void> uploadFotoPerfil(@RequestParam MultipartFile multipartFile) {
 		URI uri = clienteService.uploadFotoPerfil(multipartFile);
@@ -70,8 +100,8 @@ public class ClienteResource {
 	}
 
 	/*
-	 * Essa anotação faz com que apenas quem seja admin possa acessar esse endpoint
-	 * essa anotação só é possivel graças a
+	 * @PreAuthorize -> Essa anotação faz com que apenas quem seja admin possa
+	 * acessar esse endpoint essa anotação só é possivel graças a
 	 * anotação @EnableGlobalMethodSecurity(prePostEnabled = true) que está na
 	 * classe SecurityConfiguration
 	 */
@@ -91,6 +121,13 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(clienteDTOS);
 	}
 
+	/*
+	 * @RequestParam -> ele permite passar valores pelo parametro para a url mas
+	 * esse valor não pertence a url, por exemplo quando eu passo o número da
+	 * pagina, esse valor não pertence a url mas ele está funcionando como uma
+	 * especie de filtro.
+	 * Esse valor é capturado pelo controller através dos metodos GET ou POST
+	 */
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping(value = "/page")
 	public ResponseEntity<Page<ClienteDTO>> findPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
