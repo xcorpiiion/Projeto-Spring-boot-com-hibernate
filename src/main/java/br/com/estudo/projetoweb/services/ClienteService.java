@@ -1,5 +1,6 @@
 package br.com.estudo.projetoweb.services;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.estudo.projetoweb.domain.Cidade;
 import br.com.estudo.projetoweb.domain.Cliente;
@@ -34,6 +36,9 @@ public class ClienteService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	private S3Service s3Service;
 
 	public Cliente findById(Long id) {
 		verificaSeUsuarioPossuiPermissao(id);
@@ -107,5 +112,9 @@ public class ClienteService {
 	private void updateData(Cliente cliente1, Cliente cliente2) {
 		cliente1.setNome(cliente2.getNome());
 		cliente1.setEmail(cliente2.getEmail());
+	}
+
+	public URI uploadFotoPerfil(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 }

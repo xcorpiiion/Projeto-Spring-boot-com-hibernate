@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 */
 	private static String[] LIBERADOS_PELO_TOKEN = { "/h2-console/**" };
 	private static String[] LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES = { "/produtos/**", "/categorias/**" };
-	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR = { "/clientes/**", "/authorization/forgotPassword/**"};
+	private static String[] LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR = { "/clientes**", "/clientes/picture", "/authorization/forgotPassword/**"};
 	
 	@Autowired
 	private Environment enviroment;
