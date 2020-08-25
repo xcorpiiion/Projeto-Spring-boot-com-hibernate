@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,14 @@ public class DatabaseService {
 		Pedido pedido1 = new Pedido(new Date(), cliente1, endereco);
 		Pagamento pagamento1 = new PagamentoCartao(EnumEstadoPagamento.PEDENTE, pedido1, 5);
 		Pagamento pagamento2 = new PagamentoBoleto(EnumEstadoPagamento.CANCELADO, pedido1, new Date(), new Date());
+		
+		List<Produto> produtos = new ArrayList<>();
+		produtos.add(new Produto("Computador", BigDecimal.valueOf(2000.00), new ArrayList<>()));
+		for(int i = 0; i < 50; i++) {
+			produtos.get(0).setNome(produto1.getNome() + " " + i);
+			categoria1.getProdutos().add(produtos.get(0));
+		}
+		
 
 		pedido1.setPagamento(pagamento1);
 
