@@ -37,6 +37,8 @@ public class Cliente implements Serializable {
     private String cpfOuCnpj;
 
     private Integer enumTipoCliente;
+    
+    private String imagemUrl;
 
     
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
@@ -177,8 +179,16 @@ public class Cliente implements Serializable {
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
+    
+    public String getImagemUrl() {
+		return imagemUrl;
+	}
 
-    @Override
+	public void setImagemUrl(String imagemUrl) {
+		this.imagemUrl = imagemUrl;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
 
