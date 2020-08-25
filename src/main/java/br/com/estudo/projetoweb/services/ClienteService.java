@@ -1,5 +1,6 @@
 package br.com.estudo.projetoweb.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,15 @@ public class ClienteService {
 
 	@Autowired
 	private S3Service s3Service;
+
+	@Autowired
+	private ImageService imageService;
+
+	@Value("${img.prefix.client.profile}")
+	private String prefixImgCliente;
+	
+	@Value("${img.profile.size}")
+	private int prefixImageSize;
 
 	public Cliente findById(Long id) {
 		verificaSeUsuarioPossuiPermissao(id);
@@ -116,15 +127,13 @@ public class ClienteService {
 
 	public URI uploadFotoPerfil(MultipartFile multipartFile) {
 		UserSpringSecurity userSpringSecurity = UserService.usuarioLogado();
-		if(userSpringSecurity == null) {
+		if (userSpringSecurity == null) {
 			throw new AuthorizationException("Acesso negado");
 		}
-		URI uri = s3Service.uploadFile(multipartFile);
-		Optional<Cliente> clientes = clienteRepository.findById(userSpringSecurity.getId());
-		Cliente cliente = clientes.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrato! ID: " + userSpringSecurity.getId() + ", Tipo: " + Cliente.class.getName()));
-		cliente.setImagemUrl(uri.toString());
-		clienteRepository.save(cliente);
-		return uri;
+		BufferedImage imagem = imageService.getJpgImagemFromFile(multipartFile);
+		imagem = imageService.recortaImagem(imagem);
+		imagem = imageService.redimensionaImagem(imagem, prefixImageSize);
+		String fileName = prefixImgCliente + userSpringSecurity.getId() + ".jpg";
+		return s3Service.uploadFile(imageService.getInputStream(imagem, "jpg"), fileName, "image");
 	}
 }
