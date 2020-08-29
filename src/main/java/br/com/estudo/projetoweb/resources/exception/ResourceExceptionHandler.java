@@ -20,8 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
+	/*
+	 * @ExceptionHandler -> ele captura erros lançados (Ele tem que ser o error que
+	 * está no argumento) e permite com que eu possa fazer um tratamento de status
+	 * apropriado para cada erro
+	 */
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
+		/*Com o campo a baixo eu informei os detalhes do meu erro e informei qual é o tipo de error*/
 		StandardError standardError = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(),
 				System.currentTimeMillis(), "Not found", request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);

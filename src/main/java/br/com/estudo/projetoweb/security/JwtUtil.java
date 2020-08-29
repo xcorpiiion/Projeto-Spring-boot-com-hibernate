@@ -56,6 +56,9 @@ public class JwtUtil {
 	private Claims getClaims(String token) {
 		try {
 			/*o campo a baixo irá me retornar os claims a partir do Token*/
+			/*setSigningKey() ele é a chave de assinatura que a gente definiou*/
+			/*parseClaimsJws() -> ele converte o Claim para um Jws, ele espera um token como argumento*/
+			/*getBody() -> ele retorna os Claims do token, ou seja, as informações do token*/
 			return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
 		} catch (Exception e) {
 			return null;

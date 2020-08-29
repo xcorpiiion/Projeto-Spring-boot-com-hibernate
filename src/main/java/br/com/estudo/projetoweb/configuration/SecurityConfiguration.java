@@ -50,7 +50,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private JwtUtil jwtUtil;
-
+	
+	/*
+	 * Esse método cuida da parte de autorização do usuario. por exemplo, ele pega o
+	 * usuario que foi autentificado pelo AuthenticationManagerBuilder e verifica se
+	 * ele possui autorização para acessar determinada página.
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -63,13 +68,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 */
 		http.cors().and().csrf().disable();
 		/*
-		 * authorizaRequests() -> ele requisita uma autorização. antMatchers() -> ele
-		 * pede os MATCHERS que são os caminhos que estão na variavel.
+		 * authorizaRequests() -> ele requisita uma autorização. 
+		 * antMatchers() -> ele pede os MATCHERS que são os caminhos que estão na variavel (Ou seja, quem pode acessar o que).
 		 * LIBERADOS_PELO_TOKEN permitAll() -> ele permite que todos os antMatchers
-		 * passados como argumento sejam permitidos para serem acessados . anyRequest()
-		 * -> ele fala que todas as outras request devem ser autentificadas por causa do
+		 * passados como argumento sejam permitidos para serem acessados . 
+		 * anyRequest()-> ele fala que todas as outras request devem ser autentificadas por causa do
 		 * metodo "authenticated()".
 		 */
+		
+		/*hasRole() -> ele pede o perfil, ou seja, quem pode acessar a url. Nesse caso quem possui o perfil de Usuario*/
+		/*hasAnyRole() -> ele é identica ao hasRole() mas ele pode receber mais de um perfil.*/
+		/*http.csrf().disable().authorizeRequests().antMatchers(LIBERADOS_PELO_TOKEN).hasRole("USER");*/
+		
+		/*and() -> ele faz o meu metodo voltar para o inicio, ou seja, ele seria lido novamente pelo http.csrf().disable() até o final*/
+		/*formLogin("/login") -> ele manda para uma tela de login*/
+		/*http.csrf().disable().authorizeRequests().antMatchers(LIBERADOS_PELO_TOKEN).and.formLogin("/login");*/
+		
 		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO)
 				.permitAll().antMatchers(LIBERADOS_PELO_TOKEN).permitAll()
 				.antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO).permitAll().anyRequest()
@@ -80,7 +94,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.addFilter(new JwtAutorizationFilter(authenticationManager(), jwtUtil, userDetailService));
 		/*
 		 * Essa configuração garante que o backend não irá criar uma sessão para o
-		 * usuario
+		 * usuario, ele sempre irá precisar do token para acessar
 		 */
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
@@ -110,9 +124,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
+	
+	/*
+	 * Esse método vai trzer os objetos que irão fazer as configurações do usuario e
+	 * adicionar esses usuarios dentro do contexto do Security Em resumo ele vai
+	 * cuidar da autentificação dos usuarios.
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		/*userDetailsService() -> ele carrega os usuarios que vem do UserDetailsService*/
+		/*passwordEncoder -> ele vai comparar a senha do usuario*/
 		authenticationManagerBuilder.userDetailsService(userDetailService).passwordEncoder(bCryptPasswordEncoder());
 		super.configure(authenticationManagerBuilder);
 	}

@@ -35,6 +35,7 @@ Também pode mandar diretamente no fluxo
 do response usando a anotação e
 concluir a solicitação.*/
 @RestController
+/* Essa anotação serve para definir o caminho de uma url */
 @RequestMapping(value = "/clientes")
 public class ClienteResource {
 
@@ -46,9 +47,24 @@ public class ClienteResource {
 	 * na URL, mas não como um parametro que você passa após o sinal de interrogação
 	 * (?) mas sim quando o valor faz parte da url.
 	 */
+	/*
+	 * Dentro desse @RequestMapping (O Get faz parte dessa anotação) ele possui
+	 * alguns valores. 
+	 * Value -> ele recebe uma lista de valores strings que serve
+	 * para mostrar o caminho da url para chegar nele. 
+	 * Consumes -> ele recebe o tipo
+	 * de dado que eu posso enviar como por exemplo um "application/json" ou um
+	 * "application/xml" (No caso eu poderia fazer isso com o metodo POST). 
+	 * Produces -> ele segue a mesma logica do COnsumes mas a diferença é que ele fala o tipo
+	 * de dado que vai ser retornado.
+	 */
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> find(@PathVariable Long id) {
 		Cliente cliente = clienteService.findById(id);
+		/*
+		 * Quando eu uso esse metodo "ok()" eu estou dizendo que o código é 200, ou
+		 * seja, ele achou com sucesso
+		 */
 		return ResponseEntity.ok().body(cliente);
 	}
 
@@ -109,6 +125,7 @@ public class ClienteResource {
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		clienteService.delete(id);
+		/*Ele retorna o noContent() quando a gente só quer retornar o codigo da requisição*/
 		return ResponseEntity.noContent().build();
 	}
 

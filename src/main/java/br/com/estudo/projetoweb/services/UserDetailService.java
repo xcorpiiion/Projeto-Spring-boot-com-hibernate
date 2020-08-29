@@ -9,6 +9,7 @@ import br.com.estudo.projetoweb.domain.Cliente;
 import br.com.estudo.projetoweb.repositories.ClienteRepository;
 import br.com.estudo.projetoweb.security.UserSpringSecurity;
 
+/*UserDetailsService -> ele permite o carregamento de usuarios atrvés de uma base de dados*/
 @Service
 public class UserDetailService implements UserDetailsService {
 	
