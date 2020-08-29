@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -50,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private JwtUtil jwtUtil;
-	
+
 	/*
 	 * Esse método cuida da parte de autorização do usuario. por exemplo, ele pega o
 	 * usuario que foi autentificado pelo AuthenticationManagerBuilder e verifica se
@@ -68,22 +69,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 */
 		http.cors().and().csrf().disable();
 		/*
-		 * authorizaRequests() -> ele requisita uma autorização. 
-		 * antMatchers() -> ele pede os MATCHERS que são os caminhos que estão na variavel (Ou seja, quem pode acessar o que).
-		 * LIBERADOS_PELO_TOKEN permitAll() -> ele permite que todos os antMatchers
-		 * passados como argumento sejam permitidos para serem acessados . 
-		 * anyRequest()-> ele fala que todas as outras request devem ser autentificadas por causa do
-		 * metodo "authenticated()".
+		 * authorizaRequests() -> ele requisita uma autorização. antMatchers() -> ele
+		 * pede os MATCHERS que são os caminhos que estão na variavel (Ou seja, quem
+		 * pode acessar o que). LIBERADOS_PELO_TOKEN permitAll() -> ele permite que
+		 * todos os antMatchers passados como argumento sejam permitidos para serem
+		 * acessados . anyRequest()-> ele fala que todas as outras request devem ser
+		 * autentificadas por causa do metodo "authenticated()".
 		 */
-		
-		/*hasRole() -> ele pede o perfil, ou seja, quem pode acessar a url. Nesse caso quem possui o perfil de Usuario*/
-		/*hasAnyRole() -> ele é identica ao hasRole() mas ele pode receber mais de um perfil.*/
-		/*http.csrf().disable().authorizeRequests().antMatchers(LIBERADOS_PELO_TOKEN).hasRole("USER");*/
-		
-		/*and() -> ele faz o meu metodo voltar para o inicio, ou seja, ele seria lido novamente pelo http.csrf().disable() até o final*/
-		/*formLogin("/login") -> ele manda para uma tela de login*/
-		/*http.csrf().disable().authorizeRequests().antMatchers(LIBERADOS_PELO_TOKEN).and.formLogin("/login");*/
-		
+
+		/*
+		 * hasRole() -> ele pede o perfil, ou seja, quem pode acessar a url. Nesse caso
+		 * quem possui o perfil de Usuario
+		 */
+		/*
+		 * hasAnyRole() -> ele é identica ao hasRole() mas ele pode receber mais de um
+		 * perfil.
+		 */
+		/*
+		 * http.csrf().disable().authorizeRequests().antMatchers(LIBERADOS_PELO_TOKEN).
+		 * hasRole("USER");
+		 */
+
+		/*
+		 * and() -> ele faz o meu metodo voltar para o inicio, ou seja, ele seria lido
+		 * novamente pelo http.csrf().disable() até o final
+		 */
+		/* formLogin("/login") -> ele manda para uma tela de login */
+		/*
+		 * http.csrf().disable().authorizeRequests().antMatchers(LIBERADOS_PELO_TOKEN).
+		 * and.formLogin("/login");
+		 */
+
 		http.authorizeRequests().antMatchers(HttpMethod.GET, LIBERADOS_PELO_TOKEN_APENAS_RETORNA_VALORES_ACESSO_PUBLICO)
 				.permitAll().antMatchers(LIBERADOS_PELO_TOKEN).permitAll()
 				.antMatchers(LIBERADOS_PELO_TOKEN_QUEM_PODE_INSERIR_ACESSO_PRIVADO).permitAll().anyRequest()
@@ -113,7 +129,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected CorsConfigurationSource corsConfiguration() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-		/*Permite que todos os verbos http tenham permissão para acesso pois o Cors estava bloqueando*/
+		/*
+		 * Permite que todos os verbos http tenham permissão para acesso pois o Cors
+		 * estava bloqueando
+		 */
 		corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
 		source.registerCorsConfiguration("/**", corsConfiguration);
 		return source;
@@ -124,7 +143,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	/*
 	 * Esse método vai trzer os objetos que irão fazer as configurações do usuario e
 	 * adicionar esses usuarios dentro do contexto do Security Em resumo ele vai
@@ -132,10 +151,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		/*userDetailsService() -> ele carrega os usuarios que vem do UserDetailsService*/
-		/*passwordEncoder -> ele vai comparar a senha do usuario*/
+		/*
+		 * userDetailsService() -> ele carrega os usuarios que vem do UserDetailsService
+		 */
+		/* passwordEncoder -> ele vai comparar a senha do usuario */
 		authenticationManagerBuilder.userDetailsService(userDetailService).passwordEncoder(bCryptPasswordEncoder());
 		super.configure(authenticationManagerBuilder);
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		/* O meu Security vai ignorar essas urls que são do swagger */
+		web.ignoring().antMatchers("/v2/api-docs", "/configuration/uri", "/swagger-resources/**",
+				"/cofiguration/security", "/swagger-ui.html", "/webjars/**");
 	}
 
 }
