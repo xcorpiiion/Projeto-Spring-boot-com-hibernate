@@ -15,9 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import br.com.estudo.projetoweb.security.JwtAuthenticationFilter;
 import br.com.estudo.projetoweb.security.JwtAutorizationFilter;
@@ -119,23 +116,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		if (Arrays.asList(enviroment.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
-	}
-
-	/*
-	 * Esse metodo abaixo permite com que eu possa acessar os meus ends points com
-	 * multiplas fontes com as configurações básicas.
-	 */
-	@Bean
-	protected CorsConfigurationSource corsConfiguration() {
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-		/*
-		 * Permite que todos os verbos http tenham permissão para acesso pois o Cors
-		 * estava bloqueando
-		 */
-		corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
-		source.registerCorsConfiguration("/**", corsConfiguration);
-		return source;
 	}
 
 	/* Esse metodo abaixo serve para criptografar uma senha */
