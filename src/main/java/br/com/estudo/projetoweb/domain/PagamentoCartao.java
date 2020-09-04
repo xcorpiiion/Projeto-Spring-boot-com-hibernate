@@ -1,16 +1,14 @@
 package br.com.estudo.projetoweb.domain;
 
-import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import javax.persistence.Entity;
+import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
 
 @Entity
-@JsonTypeName("pagamentoCartao")
 public class PagamentoCartao extends Pagamento {
 
 	private static final long serialVersionUID = 1L;

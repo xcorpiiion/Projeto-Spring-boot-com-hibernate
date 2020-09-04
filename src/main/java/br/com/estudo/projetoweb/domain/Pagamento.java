@@ -15,13 +15,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import br.com.estudo.projetoweb.domain.enums.EnumEstadoPagamento;
 
+//@Entity
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+@Inheritance(strategy=InheritanceType.JOINED) 
+@JsonTypeInfo(use= JsonTypeInfo.Id.NAME,include= JsonTypeInfo.As.PROPERTY, property= "@type") 
+@JsonSubTypes({@JsonSubTypes.Type(value = PagamentoBoleto.class, name = "pagamentoBoleto"),
+    @JsonSubTypes.Type(value = PagamentoCartao.class, name = "pagamentoCartao")
+})
 /*A anotação acima fala que teremos um campo adicional no banco chamado @type*/
 public abstract class Pagamento implements Serializable {
 

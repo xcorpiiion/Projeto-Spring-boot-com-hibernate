@@ -3,6 +3,7 @@ package br.com.estudo.projetoweb.services;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,10 +30,10 @@ import br.com.estudo.projetoweb.services.exception.ObjectNotFoundException;
 
 @Service
 public class PedidoService {
-	
+
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
@@ -41,20 +42,20 @@ public class PedidoService {
 
 	@Autowired
 	private ProdutoService produtoService;
-	
+
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@Autowired
 	private PagamentoRepository pagamentoRepositpry;
-	
+
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-	
+
 	public Pedido save(Pedido pedido) {
 		return pedidoRepository.save(pedido);
 	}
-	
+
 	public Pedido buscar(Long id) {
 		Optional<Pedido> optionalPedido = pedidoRepository.findById(id);
 
@@ -87,24 +88,30 @@ public class PedidoService {
 			itemPedido.setPedido(pedido);
 		}
 	}
-	
-	/*O metodo abaixo serve para retornar uma consulta paginada*/
+
+	/* O metodo abaixo serve para retornar uma consulta paginada */
 	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		UserSpringSecurity userSpringSecurity = UserService.usuarioLogado();
-		if(userSpringSecurity == null) {
+		if (userSpringSecurity == null) {
 			throw new AuthorizationException("Acesso negado");
 		}
-        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-        Cliente cliente = clienteService.findById(userSpringSecurity.getId());
-        return pedidoRepository.findByCliente(cliente, pageRequest);
-    }
-	
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.findById(userSpringSecurity.getId());
+		return pedidoRepository.findByCliente(cliente, pageRequest);
+	}
+
 	public Pedido fromDTO(PedidoDTO pedidoDTO) {
 		Cliente cliente = clienteService.findById(pedidoDTO.getIdCliente());
 		Pagamento pagamento = pedidoDTO.getPagamento();
-		Produto produto = pedidoDTO.getProduto();
+		List<Produto> produtos = pedidoDTO.getProdutos();
 		Set<ItemPedido> itemPedidos = new HashSet<>();
-		itemPedidos.add(new ItemPedido(null, produto, null, null, pedidoDTO.getQuantidade()));
+		if (produtos == null) {
+			itemPedidos = pedidoDTO.getItensPedido();
+		} else {
+			for (Produto produto : produtos) {
+				itemPedidos.add(new ItemPedido(null, produto, null, null, pedidoDTO.getQuantidade()));
+			}
+		}
 		return new Pedido(cliente, cliente.getEnderecos().get(0), pagamento, itemPedidos);
 	}
 }
